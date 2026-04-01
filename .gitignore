@@ -1,2 +1,14 @@
-database.json
+v1/database.json
 project doc.docx
+recomendation.pdf
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Django
+*.sqlite3
+
+# Virtual environment
+v2/venv/

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Клиенты</title>
+</head>
+<body>
+    <h1>Клиенты</h1>
+    <a href="#">Добавить клиента</a>
+    <ul>
+        {% for client in clients %}
+        <li>{{ client.name }} — {{ client.phone }} — {{ client.email }}</li>
+        {% empty %}
+        <li>Клиентов нет.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
