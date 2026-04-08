@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Добавить заказ{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Добавить заказ</h1>
+<form method="post" style="max-width: 480px;">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label class="form-label">Клиент</label>
+        <select name="client_id" class="form-select">
+            {% for client in clients %}
+            <option value="{{ client.pk }}">{{ client.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Описание</label>
+        <input type="text" name="description" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Сумма (тг)</label>
+        <input type="number" name="price" class="form-control" step="0.01" min="0" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Приоритет</label>
+        <select name="priority" class="form-select">
+            {% for value, label in priorities %}
+            <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Дедлайн</label>
+        <input type="date" name="deadline" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="{% url 'orders_list' %}" class="btn btn-secondary ms-2">Отмена</a>
+</form>
+{% endblock %}

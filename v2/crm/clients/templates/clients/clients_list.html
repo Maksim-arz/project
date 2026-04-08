@@ -1,18 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Клиенты</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Клиенты{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Клиенты</h1>
-    <a href="#">Добавить клиента</a>
-    <ul>
+    <a href="{% url 'client_add' %}" class="btn btn-primary">+ Добавить клиента</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Email</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for client in clients %}
-        <li>{{ client.name }} — {{ client.phone }} — {{ client.email }}</li>
+        <tr>
+            <td>{{ client.name }}</td>
+            <td>{{ client.phone }}</td>
+            <td>{{ client.email }}</td>
+            <td>
+                <a href="{% url 'client_active_orders' client.pk %}" class="btn btn-sm btn-outline-primary">Активные заказы</a>
+                <a href="{% url 'client_order_history' client.pk %}" class="btn btn-sm btn-outline-secondary">История</a>
+                <a href="{% url 'client_delete' client.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+            </td>
+        </tr>
         {% empty %}
-        <li>Клиентов нет.</li>
+        <tr>
+            <td colspan="4" class="text-center text-muted">Клиентов нет.</td>
+        </tr>
         {% endfor %}
-    </ul>
-</body>
-</html>
+    </tbody>
+</table>
+{% endblock %}

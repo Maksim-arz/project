@@ -4,14 +4,14 @@ from clients.models import Client
 class Order(models.Model):
     class Priority(models.TextChoices):
         LOW = "Низкий"
-        MEDIUM = "Средний"
-        HIGH = "Высокий"
-    
+        MEDIUM = "Средний", "Средний"
+        HIGH = "Высокий", "Высокий"
+
     class Status(models.TextChoices):
         NEW = "Новый"
-        IN_WORK = "В работе"
-        COMPLETED = "Завершен"
-        CANCELLED = "Отменен"
+        IN_WORK = "В работе", "В работе"
+        COMPLETED = "Завершен", "Завершен"
+        CANCELLED = "Отменен", "Отменен"
     
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="orders")
     description = models.CharField(max_length=500)

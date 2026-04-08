@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}CRM — Главная{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">CRM — система управления клиентами и заказами</h1>
+<div class="list-group" style="max-width: 300px;">
+    <a href="{% url 'clients_list' %}" class="list-group-item list-group-item-action">Клиенты</a>
+    <a href="{% url 'orders_list' %}" class="list-group-item list-group-item-action">Все заказы</a>
+</div>
+{% endblock %}
