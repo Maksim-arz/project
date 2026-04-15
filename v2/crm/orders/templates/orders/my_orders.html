@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Мои заказы{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Мои заказы</h4>
+    <a href="{% url 'menu' %}" class="btn btn-primary btn-sm">+ Новый заказ</a>
+</div>
+
+{% if active %}
+<h5 class="mb-3">Активные</h5>
+{% for order in active %}
+<div class="card mb-3 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="fw-bold">Заказ #{{ order.pk }}</span>
+            {% if order.status == 'new' %}
+                <span class="badge bg-primary">Новый</span>
+            {% else %}
+                <span class="badge bg-warning text-dark">В работе</span>
+            {% endif %}
+        </div>
+        <ul class="list-unstyled mb-2">
+            {% for item in order.items.all %}
+            <li class="d-flex justify-content-between text-sm">
+                <span>{{ item.menu_item.name }} × {{ item.quantity }}</span>
+                <span class="text-muted">{{ item.subtotal }} ₸</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="d-flex justify-content-between align-items-center border-top pt-2">
+            <span class="text-muted small">{{ order.created_at|date:"d.m.Y H:i" }}</span>
+            <div class="d-flex align-items-center gap-3">
+                <span class="fw-bold">Итого: {{ order.total }} ₸</span>
+                {% if order.status == 'new' %}
+                <form method="post" action="{% url 'client_cancel_order' order.pk %}" onsubmit="return confirm('Отменить заказ #{{ order.pk }}?')">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Отменить</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<p class="text-muted">Нет активных заказов. <a href="{% url 'menu' %}">Сделать заказ</a></p>
+{% endif %}
+
+{% if history %}
+<h5 class="mt-4 mb-3">История</h5>
+{% for order in history %}
+<div class="card mb-3 shadow-sm opacity-75">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="fw-bold">Заказ #{{ order.pk }}</span>
+            {% if order.status == 'completed' %}
+                <span class="badge bg-success">Завершён</span>
+            {% else %}
+                <span class="badge bg-secondary">Отменён</span>
+            {% endif %}
+        </div>
+        <ul class="list-unstyled mb-2">
+            {% for item in order.items.all %}
+            <li class="d-flex justify-content-between">
+                <span>{{ item.menu_item.name }} × {{ item.quantity }}</span>
+                <span class="text-muted">{{ item.subtotal }} ₸</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="d-flex justify-content-between border-top pt-2">
+            <span class="text-muted small">{{ order.created_at|date:"d.m.Y H:i" }}</span>
+            <span class="fw-bold">Итого: {{ order.total }} ₸</span>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

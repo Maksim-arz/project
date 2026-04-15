@@ -1,0 +1,134 @@
+[
+  {
+    "model": "orders.menuitem",
+    "pk": 1,
+    "fields": {
+      "name": "Бургер Классический",
+      "description": "Говяжья котлета, салат, помидор, соус",
+      "price": "2490.00",
+      "category": "food",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 2,
+    "fields": {
+      "name": "Бургер Двойной",
+      "description": "Две котлеты, сыр, бекон, соус",
+      "price": "3290.00",
+      "category": "food",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 3,
+    "fields": {
+      "name": "Пицца Маргарита",
+      "description": "Томатный соус, моцарелла, базилик",
+      "price": "3890.00",
+      "category": "food",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 4,
+    "fields": {
+      "name": "Пицца Пепперони",
+      "description": "Томатный соус, моцарелла, пепперони",
+      "price": "4290.00",
+      "category": "food",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 5,
+    "fields": {
+      "name": "Донер",
+      "description": "Курица, овощи, соус, лаваш",
+      "price": "1990.00",
+      "category": "food",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 6,
+    "fields": {
+      "name": "Картофель фри",
+      "description": "Хрустящий картофель, соль",
+      "price": "990.00",
+      "category": "food",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 7,
+    "fields": {
+      "name": "Наггетсы (6 шт)",
+      "description": "Куриные наггетсы в панировке",
+      "price": "1490.00",
+      "category": "food",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 8,
+    "fields": {
+      "name": "Цезарь с курицей",
+      "description": "Салат ромэн, курица, пармезан, соус",
+      "price": "2790.00",
+      "category": "food",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 9,
+    "fields": {
+      "name": "Том Ям",
+      "description": "Острый суп с креветками и грибами",
+      "price": "3490.00",
+      "category": "food",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 10,
+    "fields": {
+      "name": "Паста Карбонара",
+      "description": "Спагетти, бекон, сыр, яйцо",
+      "price": "2990.00",
+      "category": "food",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 11,
+    "fields": {
+      "name": "Кола 0.5л",
+      "description": "Охлаждённая кола",
+      "price": "590.00",
+      "category": "drink",
+      "is_available": true
+    }
+  },
+  {
+    "model": "orders.menuitem",
+    "pk": 12,
+    "fields": {
+      "name": "Сок Апельсиновый 0.3л",
+      "description": "Свежевыжатый апельсин",
+      "price": "690.00",
+      "category": "drink",
+      "is_available": true
+    }
+  }
+]

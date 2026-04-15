@@ -1,77 +1,93 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Order
-from clients.models import Client
+from django.shortcuts import get_object_or_404, redirect, render
 
-def orders_list(request):
-    orders = Order.objects.all()
-    return render(request, 'orders/orders_list.html', {'orders': orders})
+from accounts.views import manager_required
+from .models import MenuItem, Order, OrderItem
 
-def order_add(request):
-    clients = Client.objects.all()
-    if request.method == "POST":
-        client_id = request.POST.get("client_id")
-        description = request.POST.get("description", "").strip()
-        price = request.POST.get("price", "0")
-        priority = request.POST.get("priority")
-        deadline = request.POST.get("deadline")
-        if client_id and description and deadline:
-            client = get_object_or_404(Client, pk=client_id)
-            Order.objects.create(
-                client=client,
-                description=description,
-                price=float(price),
-                priority=priority,
-                deadline=deadline,
-            )
-            return redirect("orders_list")
-    return render(request, 'orders/order_add.html', {
-        'clients': clients,
-        'priorities': Order.Priority.choices,
-    })
 
-def order_update_status(request, pk):
-    order = get_object_or_404(Order, pk=pk)
-    if request.method == "POST":
-        status = request.POST.get("status")
-        priority = request.POST.get("priority")
-        description = request.POST.get("description", "").strip()
-        if status:
-            order.status = status
-        if priority:
-            order.priority = priority
-        if description:
-            order.description = description
-        order.save()
-        return redirect("orders_list")
-    return render(request, 'orders/order_update_status.html', {
-        'order': order,
-        'statuses': Order.Status.choices,
-        'priorities': Order.Priority.choices,
-    })
+def _client_required(request):
+    # Возвращает redirect если пользователь не клиент, иначе None.
+    if not request.user.is_authenticated:
+        return redirect('login')
+    if not request.user.is_client:
+        return redirect('dashboard')
+    return None
 
-def order_delete(request, pk):
-    order = get_object_or_404(Order, pk=pk)
-    if request.method == "POST":
-        order.delete()
-        return redirect("orders_list")
-    return render(request, 'orders/order_confirm_delete.html', {'order': order})
 
-def client_active_orders(request, pk):
-    client = get_object_or_404(Client, pk=pk)
-    orders = client.orders.filter(
-        status__in=[Order.Status.NEW, Order.Status.IN_WORK]
-    ).order_by('-price')
-    return render(request, 'orders/client_active_orders.html', {
-        'client': client,
-        'orders': orders,
-    })
+def menu_view(request):
+    guard = _client_required(request)
+    if guard:
+        return guard
 
-def client_order_history(request, pk):
-    client = get_object_or_404(Client, pk=pk)
-    orders = client.orders.filter(
-        status__in=[Order.Status.COMPLETED, Order.Status.CANCELLED]
+    if request.method == 'POST':
+        item_ids = request.POST.getlist('items')
+        if item_ids:
+            order = Order.objects.create(client=request.user)
+            for item_id in item_ids:
+                try:
+                    qty = max(1, int(request.POST.get(f'quantity_{item_id}', 1)))
+                except ValueError:
+                    qty = 1
+                OrderItem.objects.create(order=order, menu_item_id=item_id, quantity=qty)
+            return redirect('my_orders')
+
+    food   = MenuItem.objects.filter(is_available=True, category=MenuItem.Category.FOOD)
+    drinks = MenuItem.objects.filter(is_available=True, category=MenuItem.Category.DRINK)
+    return render(request, 'orders/menu.html', {'food': food, 'drinks': drinks})
+
+
+def my_orders(request):
+    guard = _client_required(request)
+    if guard:
+        return guard
+
+    active = (
+        request.user.orders
+        .filter(status__in=[Order.Status.NEW, Order.Status.IN_WORK])
+        .order_by('-created_at')
+        .prefetch_related('items__menu_item')
     )
-    return render(request, 'orders/client_order_history.html', {
-        'client': client,
+    history = (
+        request.user.orders
+        .filter(status__in=[Order.Status.COMPLETED, Order.Status.CANCELLED])
+        .order_by('-created_at')
+        .prefetch_related('items__menu_item')
+    )
+    return render(request, 'orders/my_orders.html', {'active': active, 'history': history})
+
+
+@manager_required
+def manager_orders(request):
+    orders = (
+        Order.objects
+        .all()
+        .order_by('-created_at')
+        .select_related('client')
+        .prefetch_related('items__menu_item')
+    )
+    return render(request, 'orders/manager_orders.html', {
         'orders': orders,
+        'statuses': Order.Status.choices,
     })
+
+
+def client_cancel_order(request, pk):
+    guard = _client_required(request)
+    if guard:
+        return guard
+
+    order = get_object_or_404(Order, pk=pk, client=request.user)
+    if request.method == 'POST' and order.status == Order.Status.NEW:
+        order.status = Order.Status.CANCELLED
+        order.save()
+    return redirect('my_orders')
+
+
+@manager_required
+def manager_order_status(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status in dict(Order.Status.choices):
+            order.status = new_status
+            order.save()
+    return redirect('manager_orders')

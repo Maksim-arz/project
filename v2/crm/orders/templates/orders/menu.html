@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %}Меню{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">Меню</h4>
+
+<form method="post" id="order-form">
+    {% csrf_token %}
+
+    <h5 class="mb-3">Еда</h5>
+    <div class="row g-3 mb-4">
+        {% for item in food %}
+        <div class="col-md-4 col-sm-6">
+            <div class="card h-100 menu-card" data-id="{{ item.pk }}" data-price="{{ item.price }}" style="cursor:pointer;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h6 class="card-title mb-1">{{ item.name }}</h6>
+                        <span class="fw-bold text-primary ms-2 text-nowrap">{{ item.price }} ₸</span>
+                    </div>
+                    {% if item.description %}
+                        <p class="card-text text-muted small mb-0">{{ item.description }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-white border-0 qty-block" style="display:none;">
+                    <label class="form-label small mb-1">Количество</label>
+                    <input type="number" name="quantity_{{ item.pk }}" value="1" min="1" max="20"
+                           class="form-control form-control-sm qty-input" style="width:80px;" onclick="event.stopPropagation()">
+                    <input type="hidden" name="items" value="{{ item.pk }}" class="item-hidden" disabled>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h5 class="mb-3">Напитки</h5>
+    <div class="row g-3 mb-4">
+        {% for item in drinks %}
+        <div class="col-md-4 col-sm-6">
+            <div class="card h-100 menu-card" data-id="{{ item.pk }}" data-price="{{ item.price }}" style="cursor:pointer;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h6 class="card-title mb-1">{{ item.name }}</h6>
+                        <span class="fw-bold text-primary ms-2 text-nowrap">{{ item.price }} ₸</span>
+                    </div>
+                    {% if item.description %}
+                        <p class="card-text text-muted small mb-0">{{ item.description }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-white border-0 qty-block" style="display:none;">
+                    <label class="form-label small mb-1">Количество</label>
+                    <input type="number" name="quantity_{{ item.pk }}" value="1" min="1" max="20"
+                           class="form-control form-control-sm qty-input" style="width:80px;" onclick="event.stopPropagation()">
+                    <input type="hidden" name="items" value="{{ item.pk }}" class="item-hidden" disabled>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="order-bar" class="d-none">
+        <hr>
+        <div class="d-flex align-items-center gap-4">
+            <span class="text-muted" id="selected-count"></span>
+            <span class="fw-bold fs-5" id="order-total"></span>
+            <button type="submit" class="btn btn-primary">Оформить заказ</button>
+        </div>
+    </div>
+</form>
+
+<style>
+.menu-card.selected {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13,110,253,.25);
+}
+</style>
+
+<script>
+document.querySelectorAll('.menu-card').forEach(card => {
+    card.addEventListener('click', function () {
+        const selected = this.classList.toggle('selected');
+        const qtyBlock = this.querySelector('.qty-block');
+        const hidden   = this.querySelector('.item-hidden');
+        qtyBlock.style.display = selected ? 'block' : 'none';
+        hidden.disabled = !selected;
+        updateBar();
+    });
+
+    card.querySelector('.qty-input').addEventListener('input', updateBar);
+});
+
+function updateBar() {
+    const selected = document.querySelectorAll('.menu-card.selected');
+    const bar      = document.getElementById('order-bar');
+    bar.classList.toggle('d-none', selected.length === 0);
+
+    let total = 0;
+    selected.forEach(card => {
+        const price = parseFloat(card.dataset.price);
+        const qty   = parseInt(card.querySelector('.qty-input').value) || 1;
+        total += price * qty;
+    });
+
+    document.getElementById('selected-count').textContent = `Позиций: ${selected.length}`;
+    document.getElementById('order-total').textContent    = `Итого: ${total.toLocaleString('ru-RU')} ₸`;
+}
+</script>
+{% endblock %}
