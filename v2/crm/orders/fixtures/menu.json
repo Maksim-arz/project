@@ -7,7 +7,8 @@
       "description": "Говяжья котлета, салат, помидор, соус",
       "price": "2490.00",
       "category": "food",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/burger.png"
     }
   },
   {
@@ -18,7 +19,8 @@
       "description": "Две котлеты, сыр, бекон, соус",
       "price": "3290.00",
       "category": "food",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/double-burger.png"
     }
   },
   {
@@ -29,7 +31,8 @@
       "description": "Томатный соус, моцарелла, базилик",
       "price": "3890.00",
       "category": "food",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/pizza-margarita.png"
     }
   },
   {
@@ -40,7 +43,8 @@
       "description": "Томатный соус, моцарелла, пепперони",
       "price": "4290.00",
       "category": "food",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/pizza-pepperoni.png"
     }
   },
   {
@@ -51,7 +55,8 @@
       "description": "Курица, овощи, соус, лаваш",
       "price": "1990.00",
       "category": "food",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/doner.png"
     }
   },
   {
@@ -62,7 +67,8 @@
       "description": "Хрустящий картофель, соль",
       "price": "990.00",
       "category": "food",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/french-fries.png"
     }
   },
   {
@@ -73,7 +79,8 @@
       "description": "Куриные наггетсы в панировке",
       "price": "1490.00",
       "category": "food",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/nuggets.png"
     }
   },
   {
@@ -84,7 +91,8 @@
       "description": "Салат ромэн, курица, пармезан, соус",
       "price": "2790.00",
       "category": "food",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/caesar-salad.png"
     }
   },
   {
@@ -95,7 +103,8 @@
       "description": "Острый суп с креветками и грибами",
       "price": "3490.00",
       "category": "food",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/tom-yum.png"
     }
   },
   {
@@ -106,7 +115,8 @@
       "description": "Спагетти, бекон, сыр, яйцо",
       "price": "2990.00",
       "category": "food",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/pasta-carbonara.png"
     }
   },
   {
@@ -117,7 +127,8 @@
       "description": "Охлаждённая кола",
       "price": "590.00",
       "category": "drink",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/cola.png"
     }
   },
   {
@@ -128,7 +139,8 @@
       "description": "Свежевыжатый апельсин",
       "price": "690.00",
       "category": "drink",
-      "is_available": true
+      "is_available": true,
+      "image": "menu/orange-juice.png"
     }
   }
 ]

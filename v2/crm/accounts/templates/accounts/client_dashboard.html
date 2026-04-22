@@ -2,15 +2,53 @@
 {% block title %}Личный кабинет{% endblock %}
 
 {% block content %}
-<h4 class="mb-4">Добро пожаловать, {{ request.user.get_full_name }}!</h4>
+<div class="row g-4">
 
-<div class="card" style="max-width: 400px;">
-    <div class="card-body">
-        <h6 class="card-subtitle text-muted mb-3">Ваши данные</h6>
-        <p class="mb-1"><strong>Email:</strong> {{ request.user.email }}</p>
-        {% if request.user.phone %}
-            <p class="mb-1"><strong>Телефон:</strong> {{ request.user.phone }}</p>
-        {% endif %}
+    <div class="col-md-5 col-lg-4">
+        <div class="card p-4">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="ava ava-lg">
+                    {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+                </div>
+                <div>
+                    <div class="fw-bold fs-6">{{ request.user.get_full_name }}</div>
+                    <div class="text-muted small">Клиент</div>
+                </div>
+            </div>
+            <hr class="fo-divider my-3">
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex align-items-center gap-2 text-muted small">
+                    <i class="bi bi-envelope text-orange"></i>
+                    <span>{{ request.user.email }}</span>
+                </div>
+                {% if request.user.phone %}
+                <div class="d-flex align-items-center gap-2 text-muted small">
+                    <i class="bi bi-telephone text-orange"></i>
+                    <span>{{ request.user.phone }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
+
+    <div class="col-md-7 col-lg-8">
+        <div class="row g-3">
+            <div class="col-6">
+                <a href="{% url 'menu' %}" class="card-tile card p-4 text-center">
+                    <div class="icon-box mx-auto mb-2"><i class="bi bi-grid-3x3-gap"></i></div>
+                    <div class="fw-bold">Меню</div>
+                    <div class="text-muted small">Сделать заказ</div>
+                </a>
+            </div>
+            <div class="col-6">
+                <a href="{% url 'my_orders' %}" class="card-tile card p-4 text-center">
+                    <div class="icon-box mx-auto mb-2"><i class="bi bi-bag"></i></div>
+                    <div class="fw-bold">Мои заказы</div>
+                    <div class="text-muted small">История и статус</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

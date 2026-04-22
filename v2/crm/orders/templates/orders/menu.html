@@ -2,77 +2,96 @@
 {% block title %}Меню{% endblock %}
 
 {% block content %}
-<h4 class="mb-4">Меню</h4>
+<h4 class="page-title mb-4">Меню</h4>
 
 <form method="post" id="order-form">
     {% csrf_token %}
 
-    <h5 class="mb-3">Еда</h5>
+    <div class="section-label">
+        <div class="icon-box icon-box-sm"><i class="bi bi-egg-fried"></i></div>
+        Еда
+    </div>
     <div class="row g-3 mb-4">
         {% for item in food %}
         <div class="col-md-4 col-sm-6">
-            <div class="card h-100 menu-card" data-id="{{ item.pk }}" data-price="{{ item.price }}" style="cursor:pointer;">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <h6 class="card-title mb-1">{{ item.name }}</h6>
-                        <span class="fw-bold text-primary ms-2 text-nowrap">{{ item.price }} ₸</span>
+            <div class="card menu-card h-100" data-id="{{ item.pk }}" data-price="{{ item.price }}">
+                <div class="check-icon"><i class="bi bi-check"></i></div>
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="menu-card-img" alt="{{ item.name }}">
+                {% else %}
+                    <div class="menu-card-img-placeholder">🍽️</div>
+                {% endif %}
+                <div class="card-body pb-2">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <h6 class="card-title mb-1 fw-bold small">{{ item.name }}</h6>
+                        <span class="fw-bold text-nowrap small" style="color:var(--c-orange);">{{ item.price }} ₸</span>
                     </div>
                     {% if item.description %}
                         <p class="card-text text-muted small mb-0">{{ item.description }}</p>
                     {% endif %}
                 </div>
-                <div class="card-footer bg-white border-0 qty-block" style="display:none;">
-                    <label class="form-label small mb-1">Количество</label>
-                    <input type="number" name="quantity_{{ item.pk }}" value="1" min="1" max="20"
-                           class="form-control form-control-sm qty-input" style="width:80px;" onclick="event.stopPropagation()">
-                    <input type="hidden" name="items" value="{{ item.pk }}" class="item-hidden" disabled>
+                <div class="card-footer bg-white border-0 pt-0 qty-block" style="display:none;">
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <label class="form-label mb-0 text-muted small text-nowrap">Кол-во:</label>
+                        <input type="number" name="quantity_{{ item.pk }}" value="1" min="1" max="20"
+                               class="form-control form-control-sm qty-input w-auto" onclick="event.stopPropagation()">
+                        <input type="hidden" name="items" value="{{ item.pk }}" class="item-hidden" disabled>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 
-    <h5 class="mb-3">Напитки</h5>
-    <div class="row g-3 mb-4">
+    <div class="section-label">
+        <div class="icon-box icon-box-sm"><i class="bi bi-cup-straw"></i></div>
+        Напитки
+    </div>
+    <div class="row g-3 mb-5">
         {% for item in drinks %}
         <div class="col-md-4 col-sm-6">
-            <div class="card h-100 menu-card" data-id="{{ item.pk }}" data-price="{{ item.price }}" style="cursor:pointer;">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <h6 class="card-title mb-1">{{ item.name }}</h6>
-                        <span class="fw-bold text-primary ms-2 text-nowrap">{{ item.price }} ₸</span>
+            <div class="card menu-card h-100" data-id="{{ item.pk }}" data-price="{{ item.price }}">
+                <div class="check-icon"><i class="bi bi-check"></i></div>
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="menu-card-img" alt="{{ item.name }}">
+                {% else %}
+                    <div class="menu-card-img-placeholder">🥤</div>
+                {% endif %}
+                <div class="card-body pb-2">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <h6 class="card-title mb-1 fw-bold small">{{ item.name }}</h6>
+                        <span class="fw-bold text-nowrap small" style="color:var(--c-orange);">{{ item.price }} ₸</span>
                     </div>
                     {% if item.description %}
                         <p class="card-text text-muted small mb-0">{{ item.description }}</p>
                     {% endif %}
                 </div>
-                <div class="card-footer bg-white border-0 qty-block" style="display:none;">
-                    <label class="form-label small mb-1">Количество</label>
-                    <input type="number" name="quantity_{{ item.pk }}" value="1" min="1" max="20"
-                           class="form-control form-control-sm qty-input" style="width:80px;" onclick="event.stopPropagation()">
-                    <input type="hidden" name="items" value="{{ item.pk }}" class="item-hidden" disabled>
+                <div class="card-footer bg-white border-0 pt-0 qty-block" style="display:none;">
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <label class="form-label mb-0 text-muted small text-nowrap">Кол-во:</label>
+                        <input type="number" name="quantity_{{ item.pk }}" value="1" min="1" max="20"
+                               class="form-control form-control-sm qty-input w-auto" onclick="event.stopPropagation()">
+                        <input type="hidden" name="items" value="{{ item.pk }}" class="item-hidden" disabled>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 
-    <div id="order-bar" class="d-none">
-        <hr>
-        <div class="d-flex align-items-center gap-4">
-            <span class="text-muted" id="selected-count"></span>
-            <span class="fw-bold fs-5" id="order-total"></span>
-            <button type="submit" class="btn btn-primary">Оформить заказ</button>
+    <div id="order-bar" class="order-submit-bar d-none">
+        <div class="container d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-white small opacity-75" id="selected-count"></span>
+                <span class="text-white fw-bold fs-5" id="order-total"></span>
+            </div>
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-bag-check me-1"></i> Оформить заказ
+            </button>
         </div>
     </div>
-</form>
 
-<style>
-.menu-card.selected {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 2px rgba(13,110,253,.25);
-}
-</style>
+</form>
 
 <script>
 document.querySelectorAll('.menu-card').forEach(card => {
@@ -84,13 +103,12 @@ document.querySelectorAll('.menu-card').forEach(card => {
         hidden.disabled = !selected;
         updateBar();
     });
-
     card.querySelector('.qty-input').addEventListener('input', updateBar);
 });
 
 function updateBar() {
     const selected = document.querySelectorAll('.menu-card.selected');
-    const bar      = document.getElementById('order-bar');
+    const bar = document.getElementById('order-bar');
     bar.classList.toggle('d-none', selected.length === 0);
 
     let total = 0;
@@ -100,8 +118,8 @@ function updateBar() {
         total += price * qty;
     });
 
-    document.getElementById('selected-count').textContent = `Позиций: ${selected.length}`;
-    document.getElementById('order-total').textContent    = `Итого: ${total.toLocaleString('ru-RU')} ₸`;
+    document.getElementById('selected-count').textContent = `${selected.length} позиц.`;
+    document.getElementById('order-total').textContent = `${total.toLocaleString('ru-RU')} ₸`;
 }
 </script>
 {% endblock %}

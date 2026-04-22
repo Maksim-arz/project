@@ -3,13 +3,23 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-5">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title mb-3">Удалить клиента</h5>
-                <p>Вы уверены, что хотите удалить клиента <strong>{{ client.get_full_name }}</strong> ({{ client.email }})?</p>
-                <p class="text-danger small">Все заказы этого клиента будут удалены вместе с ним.</p>
-                <form method="post" class="d-flex gap-2 mt-4">
+    <div class="col-sm-10 col-md-6 col-lg-5">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="confirm-icon-box"><i class="bi bi-person-x"></i></div>
+                    <h5 class="mb-0 fw-bold">Удалить клиента</h5>
+                </div>
+                <p class="text-muted mb-2">
+                    Вы уверены, что хотите удалить клиента
+                    <strong class="text-dark">{{ client.get_full_name }}</strong>
+                    ({{ client.email }})?
+                </p>
+                <p class="text-danger small mb-4">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    Все заказы этого клиента будут удалены вместе с ним.
+                </p>
+                <form method="post" class="d-flex gap-2">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">Удалить</button>
                     <a href="{% url 'manager_clients' %}" class="btn btn-outline-secondary">Отмена</a>

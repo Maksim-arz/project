@@ -2,22 +2,38 @@
 {% block title %}Добавить клиента{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Добавить клиента</h1>
-<form method="post" style="max-width: 480px;">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label class="form-label">Имя</label>
-        <input type="text" name="name" class="form-control" required>
+<div class="row">
+    <div class="col-md-6 col-lg-5">
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <a href="{% url 'clients_list' %}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1">
+                <i class="bi bi-arrow-left"></i> Назад
+            </a>
+            <h4 class="page-title mb-0">Добавить клиента</h4>
+        </div>
+
+        <div class="card">
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Имя</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Телефон</label>
+                        <input type="text" name="phone" class="form-control">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Email</label>
+                        <input type="text" name="email" class="form-control">
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4">Сохранить</button>
+                        <a href="{% url 'clients_list' %}" class="btn btn-outline-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Телефон</label>
-        <input type="text" name="phone" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="text" name="email" class="form-control">
-    </div>
-    <button type="submit" class="btn btn-primary">Сохранить</button>
-    <a href="{% url 'clients_list' %}" class="btn btn-secondary ms-2">Отмена</a>
-</form>
+</div>
 {% endblock %}

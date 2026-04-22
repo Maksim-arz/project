@@ -2,15 +2,25 @@
 {% block title %}Удалить заказ{% endblock %}
 
 {% block content %}
-<div class="card border-danger" style="max-width: 480px;">
-    <div class="card-body">
-        <h5 class="card-title text-danger">Удалить заказ #{{ order.pk }}?</h5>
-        <p class="card-text text-muted">{{ order.description }} — {{ order.client.name }}</p>
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Да, удалить</button>
-            <a href="{% url 'orders_list' %}" class="btn btn-secondary ms-2">Отмена</a>
-        </form>
+<div class="row justify-content-center">
+    <div class="col-sm-10 col-md-6 col-lg-5">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="confirm-icon-box"><i class="bi bi-receipt-cutoff"></i></div>
+                    <h5 class="mb-0 fw-bold">Удалить заказ</h5>
+                </div>
+                <p class="text-muted mb-4">
+                    Удалить заказ <strong class="text-dark">#{{ order.pk }}</strong>?<br>
+                    <span class="small">{{ order.description }} — {{ order.client.name }}</span>
+                </p>
+                <form method="post" class="d-flex gap-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                    <a href="{% url 'orders_list' %}" class="btn btn-outline-secondary">Отмена</a>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

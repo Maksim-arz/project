@@ -7,11 +7,12 @@ class MenuItem(models.Model):
         FOOD  = 'food',  'Еда'
         DRINK = 'drink', 'Напиток'
 
-    name        = models.CharField(max_length=100)
-    description = models.CharField(max_length=200, blank=True)
-    price       = models.DecimalField(max_digits=8, decimal_places=2)
-    category    = models.CharField(max_length=10, choices=Category.choices)
+    name         = models.CharField(max_length=100)
+    description  = models.CharField(max_length=200, blank=True)
+    price        = models.DecimalField(max_digits=8, decimal_places=2)
+    category     = models.CharField(max_length=10, choices=Category.choices)
     is_available = models.BooleanField(default=True)
+    image        = models.ImageField(upload_to='menu/', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Позиция меню'

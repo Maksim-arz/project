@@ -5,28 +5,414 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Food Order{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --c-orange:       #FF6B35;
+            --c-orange-dark:  #E55A24;
+            --c-orange-bg:    #FFF1EC;
+            --c-navy:         #1B1F3B;
+            --c-bg:           #F3F4F8;
+            --c-card:         #FFFFFF;
+            --c-border:       #E5E7EC;
+            --c-text:         #1B1F3B;
+            --c-muted:        #6B7280;
+            --c-success-bg:   #E8F8F0;
+            --c-success-text: #1E7E4A;
+            --c-danger-bg:    #FEE9E9;
+            --c-danger-text:  #C0392B;
+            --radius:         12px;
+            --shadow:         0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--c-bg);
+            color: var(--c-text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: var(--c-orange); }
+        a:hover { color: var(--c-orange-dark); }
+
+        .navbar {
+            background: var(--c-navy) !important;
+            min-height: 58px;
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 0.7rem 0;
+        }
+
+        .navbar-brand .brand-icon {
+            width: 34px;
+            height: 34px;
+            background: var(--c-orange);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+
+        .nav-pills-bar {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .nav-pills-bar .nav-link {
+            color: rgba(255,255,255,0.6) !important;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.45rem 0.8rem !important;
+            border-radius: 7px;
+            transition: color 0.15s, background 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-pills-bar .nav-link:hover {
+            color: #fff !important;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-pills-bar .nav-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255,255,255,0.12);
+            margin: 0 6px;
+        }
+
+        .nav-pills-bar .nav-user {
+            color: rgba(255,255,255,0.35) !important;
+            cursor: default;
+            font-size: 0.78rem;
+        }
+
+        .nav-pills-bar .nav-user:hover {
+            background: transparent !important;
+        }
+
+        .card {
+            border: none;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            background: var(--c-card);
+        }
+
+        .card-tile {
+            transition: box-shadow 0.2s, transform 0.15s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card-tile:hover {
+            box-shadow: 0 6px 28px rgba(255,107,53,0.18);
+            transform: translateY(-2px);
+            color: inherit;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--c-orange);
+            border-color: var(--c-orange);
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:active {
+            background: var(--c-orange-dark) !important;
+            border-color: var(--c-orange-dark) !important;
+        }
+
+        .btn-outline-primary {
+            color: var(--c-orange);
+            border-color: var(--c-orange);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--c-orange);
+            border-color: var(--c-orange);
+            color: #fff;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            border: 1.5px solid var(--c-border);
+            font-size: 0.9rem;
+            padding: 0.55rem 0.85rem;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            background: #fff;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--c-orange);
+            box-shadow: 0 0 0 3px rgba(255,107,53,0.12);
+        }
+
+        .form-label {
+            font-size: 0.835rem;
+            font-weight: 500;
+            color: var(--c-muted);
+            margin-bottom: 0.35rem;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--c-orange);
+            border-color: var(--c-orange);
+        }
+
+        .table { font-size: 0.9rem; }
+
+        .table > thead > tr > th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--c-muted);
+            border-bottom: 1.5px solid var(--c-border);
+            padding-top: 0.9rem;
+            padding-bottom: 0.9rem;
+            background: #FAFBFC;
+        }
+
+        .table > tbody > tr > td {
+            vertical-align: middle;
+            border-color: var(--c-border);
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .table > tbody > tr:hover > td { background: #FAFBFC; }
+
+        .badge {
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.72rem;
+            padding: 0.32em 0.65em;
+        }
+
+        .badge-success { background: var(--c-success-bg); color: var(--c-success-text); }
+        .badge-muted   { background: var(--c-bg);         color: var(--c-muted); }
+        .badge-blue    { background: #EFF6FF;              color: #1D4ED8; }
+        .badge-yellow  { background: #FFFBEB;              color: #92400E; }
+        .badge-danger  { background: var(--c-danger-bg);   color: var(--c-danger-text); }
+
+        .alert {
+            border-radius: 9px;
+            font-size: 0.9rem;
+            border: none;
+        }
+
+        .alert-danger  { background: var(--c-danger-bg);  color: var(--c-danger-text); }
+        .alert-success { background: var(--c-success-bg); color: var(--c-success-text); }
+
+        .ava {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--c-orange), #FF9B6C);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .ava-lg {
+            width: 52px;
+            height: 52px;
+            font-size: 1.05rem;
+        }
+
+        .icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--c-orange-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--c-orange);
+            font-size: 1.2rem;
+        }
+
+        .icon-box-sm {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .icon-box-lg {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            font-size: 1.5rem;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .order-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+        }
+
+        .order-card.s-new::before      { background: #3B82F6; }
+        .order-card.s-in-work::before  { background: #F59E0B; }
+        .order-card.s-done::before     { background: #10B981; }
+        .order-card.s-cancel::before   { background: #9CA3AF; }
+
+        .menu-card {
+            cursor: pointer;
+            transition: box-shadow 0.15s, border-color 0.15s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .menu-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+
+        .menu-card.selected {
+            border-color: var(--c-orange) !important;
+            box-shadow: 0 0 0 3px rgba(255,107,53,0.14) !important;
+        }
+
+        .menu-card.selected .check-icon { display: flex !important; }
+
+        .menu-card .check-icon {
+            display: none;
+            position: absolute;
+            top: 10px; right: 10px;
+            width: 22px; height: 22px;
+            background: var(--c-orange);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.65rem;
+        }
+
+        .menu-card-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+
+        .menu-card-img-placeholder {
+            width: 100%;
+            height: 140px;
+            background: var(--c-orange-bg);
+            border-radius: var(--radius) var(--radius) 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .order-submit-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--c-navy);
+            padding: 14px 0;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            z-index: 100;
+        }
+
+        .page-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .confirm-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--c-danger-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #DC3545;
+            font-size: 1.2rem;
+        }
+
+        .main-wrap { padding: 2rem 0 3.5rem; }
+
+        .fo-divider {
+            border: none;
+            border-top: 1px solid var(--c-border);
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'dashboard' %}">Food Order</a>
+        <a class="navbar-brand" href="{% url 'dashboard' %}">
+            <span class="brand-icon"><i class="bi bi-fire"></i></span>
+            Food Order
+        </a>
 
         {% if request.user.is_authenticated %}
-        <div class="navbar-nav ms-auto">
+        <div class="nav-pills-bar ms-auto">
             {% if request.user.is_client %}
-                <a class="nav-link" href="{% url 'menu' %}">Меню</a>
-                <a class="nav-link" href="{% url 'my_orders' %}">Мои заказы</a>
+                <a class="nav-link" href="{% url 'menu' %}"><i class="bi bi-grid-3x3-gap"></i>Меню</a>
+                <a class="nav-link" href="{% url 'my_orders' %}"><i class="bi bi-bag"></i>Мои заказы</a>
             {% endif %}
             {% if request.user.is_manager %}
-                <a class="nav-link" href="{% url 'manager_clients' %}">Клиенты</a>
-                <a class="nav-link" href="{% url 'manager_orders' %}">Заказы</a>
+                <a class="nav-link" href="{% url 'manager_clients' %}"><i class="bi bi-people"></i>Клиенты</a>
+                <a class="nav-link" href="{% url 'manager_orders' %}"><i class="bi bi-receipt"></i>Заказы</a>
             {% endif %}
-            <span class="nav-link text-light opacity-75">{{ request.user.email }}</span>
-            <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+            <div class="nav-divider d-none d-md-block"></div>
+            <span class="nav-link nav-user d-none d-md-flex"><i class="bi bi-person-circle"></i>{{ request.user.email }}</span>
+            <a class="nav-link" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i>Выйти</a>
         </div>
         {% else %}
-        <div class="navbar-nav ms-auto">
+        <div class="nav-pills-bar ms-auto">
             <a class="nav-link" href="{% url 'login' %}">Войти</a>
             <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
         </div>
@@ -34,7 +420,7 @@
     </div>
 </nav>
 
-<div class="container">
+<div class="container main-wrap">
     {% block content %}{% endblock %}
 </div>
 
