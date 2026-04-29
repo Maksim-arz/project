@@ -1,7 +1,14 @@
+from django.core.mail import send_mail
+from django.db.models import Case, IntegerField, Value, When
 from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.views import manager_required
 from .models import MenuItem, Order, OrderItem
+
+NOTIFY_STATUSES = {
+    Order.Status.IN_WORK:   'В работе',
+    Order.Status.COMPLETED: 'Завершён',
+}
 
 
 def _client_required(request):
@@ -57,15 +64,23 @@ def my_orders(request):
 
 @manager_required
 def manager_orders(request):
-    orders = (
-        Order.objects
-        .all()
-        .order_by('-created_at')
-        .select_related('client')
-        .prefetch_related('items__menu_item')
+    base_qs = Order.objects.select_related('client').prefetch_related('items__menu_item')
+    active = (
+        base_qs
+        .filter(status__in=[Order.Status.IN_WORK, Order.Status.NEW])
+        .annotate(status_order=Case(
+            When(status=Order.Status.IN_WORK, then=Value(0)),
+            When(status=Order.Status.NEW, then=Value(1)),
+            output_field=IntegerField(),
+        ))
+        .order_by('status_order', '-created_at')
     )
+    history = base_qs.filter(
+        status__in=[Order.Status.COMPLETED, Order.Status.CANCELLED]
+    ).order_by('-created_at')
     return render(request, 'orders/manager_orders.html', {
-        'orders': orders,
+        'active': active,
+        'history': history,
         'statuses': Order.Status.choices,
     })
 
@@ -90,4 +105,12 @@ def manager_order_status(request, pk):
         if new_status in dict(Order.Status.choices):
             order.status = new_status
             order.save()
+            if new_status in NOTIFY_STATUSES:
+                send_mail(
+                    subject=f'Статус заказа #{order.pk} изменён',
+                    message=f'Ваш заказ #{order.pk} «{NOTIFY_STATUSES[new_status]}».',
+                    from_email=None,
+                    recipient_list=[order.client.email],
+                    fail_silently=True,
+                )
     return redirect('manager_orders')

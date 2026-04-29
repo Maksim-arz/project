@@ -12,3 +12,6 @@ __pycache__/
 
 # Virtual environment
 v2/venv/
+
+# Secrets
+.env
